@@ -1,0 +1,101 @@
+{
+  "navigation": {
+    "newGeneration": "New Generation",
+    "history": "History"
+  },
+  "generationType": {
+    "image": "Image Generation",
+    "video": "Video Generation"
+  },
+  "taskQueue": {
+    "title": "Task Queue",
+    "clearCompleted": "Clear Completed Tasks",
+    "noActiveTasks": "No active tasks",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "clickToViewResult": "Click to view result"
+  },
+  "buttons": {
+    "useForGeneration": "Use for Generation",
+    "copy": "Copy",
+    "close": "Close",
+    "downloadImage": "Download Image",
+    "downloadVideo": "Download Video",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "copyPrompt": "Copy Prompt",
+    "deleteAll": "Delete All"
+  },
+  "generation": {
+    "result": {
+      "imageTitle": "Generated Image",
+      "videoTitle": "Generated Video",
+      "seed": "Seed",
+      "random": "Random",
+      "resolution": "Resolution",
+      "prompt": "Prompt",
+      "noPromptData": "No prompt data",
+      "willAppearHere": "Generated content will appear here"
+    }
+  },
+  "form": {
+    "prompt": "Prompt",
+    "enterPrompt": "Enter a detailed description of what you want to generate",
+    "model": "Model",
+    "seed": "Seed (optional)",
+    "randomSeed": "Random seed if left empty",
+    "generate": "Generate",
+    "advancedSettings": "Advanced Settings",
+    "numberOfImages": "Number of Images",
+    "outputFormat": "Output Format",
+    "aspectRatio": "Aspect Ratio",
+    "resolution": "Resolution",
+    "inferenceSteps": "Inference Steps",
+    "safetyChecker": "Enable Safety Checker",
+    "safetyTolerance": "Safety Tolerance",
+    "promptExpansion": "Enable Prompt Expansion",
+    "rawMode": "Raw Mode",
+    "generating": "Generating..."
+  },
+  "status": {
+    "pending": "Pending",
+    "inQueue": "In Queue",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "failed": "Failed",
+    "cancelled": "Cancelled"
+  },
+  "history": {
+    "noHistory": "No history items",
+    "clearHistory": "Clear History",
+    "clearSelected": "Clear Selected",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "imageGeneration": "Image Generation",
+    "videoGeneration": "Video Generation",
+    "viewDetails": "View Details",
+    "details": "Details",
+    "generationDate": "Generation Date",
+    "allItems": "All Items",
+    "gridView": "Grid",
+    "listView": "List",
+    "deleteConfirmTitle": "Confirm Deletion",
+    "deleteConfirmMessage": " - Are you sure you want to delete this item?",
+    "clearAllConfirmTitle": "Confirm Clear All",
+    "clearAllImageConfirmMessage": "Are you sure you want to delete all image history? This action cannot be undone.",
+    "clearAllVideoConfirmMessage": "Are you sure you want to delete all video history? This action cannot be undone.",
+    "clearAllConfirmMessage": "Are you sure you want to delete all history? This action cannot be undone."
+  },
+  "language": {
+    "switchTo": "日本語に切り替え"
+  },
+  "notifications": {
+    "promptCopied": "Prompt copied to clipboard",
+    "promptCopyFailed": "Failed to copy prompt"
+  },
+  "common": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  }
+} 
