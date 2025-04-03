@@ -13,7 +13,7 @@ interface NotificationContextType {
   };
 }
 
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+export const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 export const NotificationProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [notification, setNotification] = useState<{
@@ -91,4 +91,4 @@ export const useNotification = () => {
     throw new Error('useNotification must be used within a NotificationProvider');
   }
   return context;
-}; 
+};

@@ -1,7 +1,6 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { NotificationProvider } from '@/components/common/NotificationContext'
-import { TranslationsProvider } from '@/components/TranslationsProvider'
 import type { Metadata } from 'next'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -22,13 +21,11 @@ export default function RootLayout({
     <html lang={locale}>
       <body className={inter.className}>
         <NotificationProvider>
-          <TranslationsProvider locale={locale}>
             <main className="min-h-screen">
               {children}
             </main>
-          </TranslationsProvider>
         </NotificationProvider>
       </body>
     </html>
   )
-} 
+}

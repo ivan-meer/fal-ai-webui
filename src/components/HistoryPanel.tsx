@@ -41,7 +41,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ type = 'all', onSelectHisto
   // 履歴を読み込む - type または filterType が変更されたときに再読み込み
   useEffect(() => {
     loadHistory();
-  }, [type, filterType]);
+  }, [type, filterType, loadHistory]);
   
   // 履歴を更新する
   const loadHistory = () => {
@@ -522,4 +522,4 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ type = 'all', onSelectHisto
   );
 };
 
-export default HistoryPanel; 
+export default HistoryPanel;

@@ -1,3 +1,31 @@
+/**
+ * @module TextToVideoForm
+ * @description Компонент формы для генерации видео на основе текстового описания.
+ * Поддерживает настройку различных параметров генерации, включая разрешение,
+ * соотношение сторон, количество шагов вывода и другие опции.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <TextToVideoForm
+ *   onResultChange={(result) => console.log(result)}
+ *   initialState={{
+ *     prompt: "A beautiful sunset over the ocean",
+ *     resolution: "720p",
+ *     aspectRatio: "16:9",
+ *     inferenceSteps: 30
+ *   }}
+ *   onStateChange={(state) => console.log(state)}
+ * />
+ * ```
+ */
+
+// TODO: Добавить предпросмотр кадров видео во время генерации
+// TODO: Реализовать возможность редактирования отдельных кадров
+// TODO: Добавить поддержку различных форматов экспорта видео
+// TODO: Оптимизировать процесс генерации для длинных видео
+// TODO: Реализовать систему очереди для массовой генерации
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -101,7 +129,7 @@ const TextToVideoForm: React.FC<TextToVideoFormProps> = ({
   useEffect(() => {
     const handleTasksUpdate = (tasks: Task[]) => {
       const videoTasks = tasks.filter(
-        task => task.type === 'video' && 
+        task => task.type === 'text-to-video' &&
         (task.status === 'pending' || task.status === 'in_queue' || task.status === 'in_progress')
       );
       setActiveTaskCount(videoTasks.length);
@@ -377,4 +405,4 @@ const TextToVideoForm: React.FC<TextToVideoFormProps> = ({
   );
 };
 
-export default TextToVideoForm; 
+export default TextToVideoForm;

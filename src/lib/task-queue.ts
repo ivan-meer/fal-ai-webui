@@ -1,33 +1,41 @@
 import { fal } from '@fal-ai/client';
-import { generateImage, generateVideo } from './fal-client';
+import { 
+  generateImageToImage, 
+  generateImageToVideo, 
+  generateTextToImage, 
+  generateTextToVideo,
+  ImageGenerationResult,
+  VideoGenerationResult
+} from './fal-client';
 
-// タスクの状態
+// Состояния задачи
 export type TaskStatus = 'pending' | 'in_queue' | 'in_progress' | 'completed' | 'failed';
 
-// タスクの種類
-export type TaskType = 'image' | 'video';
+// Типы задач
+export type TaskType = 'text2image' | 'image2image' | 'text2video' | 'image2video' | 'image' | 'video';
 
 // タスク更新リスナー型
 export type TaskUpdateListener = (tasks: Task[]) => void;
 
-// タスクインターフェース
+// Интерфейс задачи
 export interface Task {
   id: string;
   type: TaskType;
-  status: TaskStatus;
   prompt: string;
-  modelId: string;
+  model: string;
+  options: Record<string, unknown>;
+  status: TaskStatus;
+  result?: ImageGenerationResult | VideoGenerationResult | null;
+  error?: string | null;
+  createdAt: number | string;
   requestId?: string;
-  error?: string;
   progress?: number;
-  logs?: string[];
-  result?: any;
-  startTime: number;
+  startTime?: number;
   endTime?: number;
-  options: Record<string, any>;
+  logs?: Array<{message: string}>;
 }
 
-// Fal.ai API キューのステータスレスポンス型
+// Тип ответа статуса очереди Fal.ai API
 interface FalQueueStatus {
   status: 'IN_QUEUE' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
   logs?: Array<{ message: string; level?: string; timestamp?: string }>;
@@ -35,8 +43,8 @@ interface FalQueueStatus {
 }
 
 /**
- * タスクキューマネージャー
- * 複数の生成タスクを追跡・管理するためのシングルトンクラス
+ * Менеджер очереди задач
+ * Singleton класс для отслеживания и управления несколькими задачами генерации
  */
 class TaskQueueManager {
   private tasks: Task[] = [];
@@ -49,11 +57,12 @@ class TaskQueueManager {
    */
   addTask(type: TaskType, prompt: string, modelId: string, options: Record<string, any>): Task {
     const task: Task = {
+      createdAt: Date.now(),
       id: `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type,
       status: 'pending',
       prompt,
-      modelId,
+      model: modelId,
       startTime: Date.now(),
       options
     };

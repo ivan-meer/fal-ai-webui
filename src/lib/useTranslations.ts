@@ -1,14 +1,25 @@
-'use client';
-
-import { useContext } from 'react';
-import { TranslationContext } from '@/components/TranslationsProvider';
-
+// Статические русские переводы
 export const useTranslations = () => {
-  const context = useContext(TranslationContext);
-  
-  if (!context) {
-    throw new Error('useTranslations must be used within a TranslationsProvider');
-  }
-  
-  return context;
-}; 
+  const t = (key: string) => {
+    const translations: Record<string, string> = {
+      'generation.result.seed': 'Сид',
+      'generation.result.random': 'Случайный',
+      'generation.result.resolution': 'Разрешение',
+      'generation.result.prompt': 'Промпт',
+      'generation.result.noPromptData': 'Нет данных промпта',
+      'buttons.copy': 'Копировать',
+      'buttons.downloadImage': 'Скачать изображение',
+      'buttons.downloadVideo': 'Скачать видео',
+      'navigation.newGeneration': 'Новая генерация',
+      'navigation.history': 'История',
+      'generationType.image': 'Изображение',
+      'generationType.video': 'Видео',
+      'generation.result.imageTitle': 'Результат генерации изображения',
+      'generation.result.videoTitle': 'Результат генерации видео',
+      'generation.result.willAppearHere': 'Результат появится здесь'
+    };
+    return translations[key] || key;
+  };
+
+  return { t, locale: 'ru' };
+};

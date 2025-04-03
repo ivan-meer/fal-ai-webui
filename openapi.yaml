@@ -1,0 +1,189 @@
+openapi: 3.1.0
+info:
+  title: FAL.AI WebUI API
+  version: 1.0.0
+  description: API спецификация для FAL.AI WebUI
+
+servers:
+  - url: http://localhost:3000/api
+    description: Локальный сервер разработки
+
+components:
+  schemas:
+    ImageGenerationRequest:
+      type: object
+      required:
+        - prompt
+        - model
+      properties:
+        prompt:
+          type: string
+          description: Текстовый промпт для генерации
+        seed:
+          type: integer
+          description: Seed для воспроизводимости результатов
+        model:
+          type: string
+          description: ID модели для генерации
+        numImages:
+          type: integer
+          minimum: 1
+          maximum: 4
+          default: 1
+        outputFormat:
+          type: string
+          enum: [jpeg, png]
+          default: jpeg
+        aspectRatio:
+          type: string
+          enum: ["21:9", "16:9", "4:3", "3:2", "1:1", "2:3", "3:4", "9:16", "9:21"]
+          default: "3:4"
+        enableSafetyChecker:
+          type: boolean
+          default: false
+        safetyTolerance:
+          type: string
+          enum: ["1", "2", "3", "4", "5", "6"]
+          default: "6"
+
+    ImageGenerationResult:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            type: object
+            properties: 
+              url:
+                type: string
+              width:
+                type: integer
+              height:
+                type: integer
+              content_type:
+                type: string
+        seed:
+          type: integer
+        timings:
+          type: object
+        has_nsfw_concepts:
+          type: array
+          items:
+            type: boolean
+    
+    VideoGenerationRequest:
+      type: object
+      required:
+        - prompt
+        - model
+      properties:
+        prompt:
+          type: string
+        seed:
+          type: integer
+        model:
+          type: string
+        resolution:
+          type: string
+          enum: ["480p", "580p", "720p"]
+          default: "720p"
+        aspectRatio:
+          type: string
+          enum: ["16:9", "9:16"]
+          default: "16:9"
+        inferenceSteps:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 30
+        enableSafetyChecker:
+          type: boolean
+          default: false
+        enablePromptExpansion:
+          type: boolean
+          default: false
+
+    VideoGenerationResult:
+      type: object
+      properties:
+        video:
+          type: object
+          properties:
+            url:
+              type: string
+            content_type:
+              type: string
+            file_name:
+              type: string
+            file_size:
+              type: integer
+        seed:
+          type: integer
+    
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: integer
+    
+paths:
+  /generate/image:
+    post:
+      summary: Генерация изображений
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageGenerationRequest'
+      responses:
+        '200':
+          description: Успешная генерация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageGenerationResult'
+        '400':
+          description: Ошибка в параметрах запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+  /generate/video:
+    post:
+      summary: Генерация видео
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoGenerationRequest'
+      responses:
+        '200':
+          description: Успешная генерация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGenerationResult'
+        '400':
+          description: Ошибка в параметрах запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

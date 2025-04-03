@@ -1,3 +1,32 @@
+/**
+ * @module TextToImageForm
+ * @description Компонент формы для генерации изображений на основе текстового описания.
+ * Предоставляет широкий набор настроек для контроля процесса генерации, включая
+ * количество изображений, формат вывода, соотношение сторон и параметры безопасности.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <TextToImageForm
+ *   onResultChange={(result) => console.log(result)}
+ *   initialState={{
+ *     prompt: "A beautiful mountain landscape",
+ *     numImages: 1,
+ *     outputFormat: "png",
+ *     aspectRatio: "1:1",
+ *     enableSafetyChecker: true
+ *   }}
+ *   onStateChange={(state) => console.log(state)}
+ * />
+ * ```
+ */
+
+// TODO: Добавить предпросмотр изображения перед генерацией
+// TODO: Реализовать кэширование результатов генерации
+// TODO: Добавить поддержку drag-and-drop для загрузки референсных изображений
+// TODO: Оптимизировать производительность при генерации множества изображений
+// TODO: Добавить продвинутые настройки для контроля качества генерации
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -414,4 +443,4 @@ const TextToImageForm: React.FC<TextToImageFormProps> = ({
   );
 };
 
-export default TextToImageForm; 
+export default TextToImageForm;
