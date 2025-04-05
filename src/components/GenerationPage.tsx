@@ -20,7 +20,7 @@ import {
 import Header from './Header';
 import TextToImageForm from './TextToImageForm';
 import TextToVideoForm from './TextToVideoForm';
-import HistoryPanel from './HistoryPanel';
+import { HistoryPanel } from './HistoryPanel';
 import TaskQueuePanel from './TaskQueuePanel';
 import CopyToClipboardButton from './common/CopyToClipboardButton';
 import UseForGenerationButton from './common/UseForGenerationButton';
@@ -101,12 +101,12 @@ const GenerationPage: React.FC = () => {
   // タスクを選択して結果を表示
   const handleSelectTask = (task: Task) => {
     if (task.status === 'completed' && task.result) {
-      if (task.type === 'image') {
+      if (task.type === 'image' && task.result && 'images' in task.result) {
         setImageResult(task.result);
         setGenerationType('image');
         setSelectedImageIndex(0);
-      } else if (task.type === 'video') {
-        setVideoResult(task.result);
+      } else if (task.type === 'video' && task.result && 'video' in task.result) {
+        setVideoResult(task.result as VideoGenerationResult);
         setGenerationType('video');
       }
     }
@@ -439,7 +439,6 @@ const GenerationPage: React.FC = () => {
           </div>
         ) : (
           <HistoryPanel 
-            type="all" 
             onSelectHistoryItem={handleSelectHistoryItem} 
             onUsePrompt={usePromptForGeneration}
           />
@@ -456,4 +455,4 @@ const GenerationPage: React.FC = () => {
   );
 };
 
-export default GenerationPage; 
+export default GenerationPage;

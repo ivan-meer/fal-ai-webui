@@ -1,30 +1,33 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { NotificationProvider } from '@/components/common/NotificationContext'
-import type { Metadata } from 'next'
+import { ThemeProvider } from '@/context/ThemeContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'FAL.AI Web UI',
-  description: 'Web interface for FAL.AI image and video generation models',
-}
-
+/**
+ * Основной layout приложения.
+ * Обеспечивает:
+ * - Глобальные стили и шрифты
+ * - Провайдеры тем и уведомлений
+ * - Адаптивную цветовую схему
+ */
 export default function RootLayout({
   children,
-  params: { locale = 'en' } = {},
 }: {
-  children: React.ReactNode,
-  params?: { locale?: string }
+  children: React.ReactNode
 }) {
   return (
-    <html lang={locale}>
+    <html lang="ru">
       <body className={inter.className}>
-        <NotificationProvider>
-            <main className="min-h-screen">
+        <ThemeProvider>
+          <NotificationProvider>
+            {/* Основной контент с динамическими классами темы */}
+            <main className="min-h-screen transition-colors duration-300 dark:bg-gray-900 dark:text-white light:bg-white light:text-gray-900">
               {children}
             </main>
-        </NotificationProvider>
+          </NotificationProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

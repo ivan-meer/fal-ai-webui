@@ -32,6 +32,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   MODELS, 
   VideoGenerationResult,
+  VideoGenerationOptions,
   VideoResolution,
   VideoAspectRatio
 } from '@/lib/fal-client';
@@ -129,7 +130,7 @@ const TextToVideoForm: React.FC<TextToVideoFormProps> = ({
   useEffect(() => {
     const handleTasksUpdate = (tasks: Task[]) => {
       const videoTasks = tasks.filter(
-        task => task.type === 'text-to-video' &&
+        task => task.type === 'video' &&
         (task.status === 'pending' || task.status === 'in_queue' || task.status === 'in_progress')
       );
       setActiveTaskCount(videoTasks.length);
@@ -154,13 +155,13 @@ const TextToVideoForm: React.FC<TextToVideoFormProps> = ({
     
     try {
       // タスクキューに追加
-      const options = {
+      const options: VideoGenerationOptions & { seed?: number } = {
         resolution,
         aspect_ratio: aspectRatio,
         inference_steps: inferenceSteps,
         enable_safety_checker: enableSafetyChecker,
         enable_prompt_expansion: enablePromptExpansion,
-        seed: seed
+        seed // Явное указание типа опций
       };
       
       // タスクキューを使用して動画生成をキューに追加

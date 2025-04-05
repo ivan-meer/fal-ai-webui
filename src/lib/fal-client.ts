@@ -1,4 +1,5 @@
 import { fal } from '@fal-ai/client';
+import type { HistoryItem } from '@/lib/types';
 
 /**
  * Initialize the Fal.ai client with proxy URL instead of API key.
@@ -83,7 +84,7 @@ export interface ImageGenerationResult {
     content_type?: string;
   }[];
   seed?: number;
-  timings?: any;
+  timings?: object;
   has_nsfw_concepts?: boolean[];
   prompt?: string;
 }
@@ -228,6 +229,7 @@ export interface VideoGenerationOptions extends AdvancedVideoOptions {
   inference_steps?: number;
   enable_safety_checker?: boolean;
   enable_prompt_expansion?: boolean;
+  seed?: number;
 }
 
 export async function generateVideo(
@@ -257,14 +259,14 @@ export async function generateVideo(
       },
     });
     
-    const result = (response as FalApiResponse<VideoGenerationResult>).data;
+    const apiResponse = response as FalApiResponse<VideoGenerationResult>;
     
-    // Type guard to ensure the result has the expected structure
-    if (!result || !result.video || !result.video.url) {
-      throw new Error('Unexpected API response format');
+    // Type guard to ensure the response structure
+    if (!apiResponse?.data?.video?.url) {
+      throw new Error('Неверный формат ответа от API');
     }
     
-    return result;
+    return apiResponse.data;
   } catch (error) {
     console.error('Error generating video:', error);
     throw error;
@@ -273,6 +275,31 @@ export async function generateVideo(
 
 
 export class FalClient {
+  // Получение истории генераций
+  static async getHistory(): Promise<HistoryItem[]> {
+    try {
+      const response = await fetch('/api/history');
+      if (!response.ok) throw new Error('Ошибка сервера');
+      return await response.json();
+    } catch (error) {
+      console.error('Ошибка получения истории:', error);
+      throw new Error('Не удалось загрузить историю');
+    }
+  }
+
+  // Удаление элемента истории
+  static async deleteHistoryItem(id: string): Promise<void> {
+    try {
+      const response = await fetch(`/api/history/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Ошибка сервера');
+    } catch (error) {
+      console.error('Ошибка удаления:', error);
+      throw new Error('Не удалось удалить запись');
+    }
+  }
+
   constructor(private apiKey?: string) {
     if (apiKey) {
       fal.config({
@@ -307,36 +334,28 @@ export class FalClient {
   async generateVideo(
     prompt: string,
     modelId: string = MODELS.textToVideo.WAN_T2V,
-    options: {
-      aspect_ratio?: VideoAspectRatio;
-      resolution?: VideoResolution;
-      interpolation_method?: InterpolationMethod;
-      motion_bucket_id?: number;
-      noise_aug_strength?: number;
-      min_cfg?: number;
-      max_cfg?: number;
-      frame_interpolation_factor?: number;
-    } = {}
+    options: VideoGenerationOptions = {}
   ): Promise<VideoGenerationResult> {
-    if (!prompt) throw new Error('Prompt is required');
+    if (!prompt) throw new Error('Требуется текстовый запрос');
     try {
       const response = await fal.subscribe(modelId, {
-        method: 'POST',
         input: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
+          prompt,
+          seed: options.seed,
+          resolution: options.resolution ?? '720p',
+          aspect_ratio: options.aspect_ratio ?? '16:9',
+          ...options
+        }
       });
-  
-      if (!response.ok) {
-        const errorData: Record<string, unknown> = await response.json();
-        throw new Error(errorData.detail as string || 'Failed to generate image');
+
+      const apiResponse = response as FalApiResponse<VideoGenerationResult>;
+      if (!apiResponse?.data?.video?.url) {
+        throw new Error('Неверный формат ответа от API');
       }
-  
-      return await response.json() as ImageGenerationResult;
+      return apiResponse.data;
     } catch (error) {
-      console.error('Error generating image:', error);
-      throw error;
+      console.error('Ошибка генерации видео:', error);
+      throw new Error(`Не удалось создать видео: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
     }
   }
 }

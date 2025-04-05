@@ -1,5 +1,11 @@
 "use client";
 
+// Компонент шапки приложения с переключением темы
+// Изменения:
+// - Добавлен фон для кнопки темы
+// - Улучшены hover-эффекты
+// - Добавлена aria-метка для доступности
+
 import React from 'react';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -17,8 +23,8 @@ const Header: React.FC = () => {
         <div className="flex items-center space-x-4">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            aria-label={theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему'}
+            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            aria-label={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
           >
             {theme === 'dark' ? (
               <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
